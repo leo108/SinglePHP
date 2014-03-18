@@ -121,6 +121,9 @@ class SinglePHP {
      * @return void
      */
     public function run(){
+        if(C('USE_SESSION') == true){
+            session_start();
+        }
         C('APP_FULL_PATH', getcwd().'/'.C('APP_PATH').'/');
         includeIfExist( C('APP_FULL_PATH').'/common.php');
         $pathMod = C('PATH_MOD');
