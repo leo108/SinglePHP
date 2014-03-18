@@ -110,6 +110,7 @@ class SinglePHP {
         includeIfExist( C('APP_FULL_PATH').'/common.php');
         $pathMod = C('PATH_MOD');
         $pathMod = empty($pathMod)?'NORMAL':$pathMod;
+        spl_autoload_register(array('SinglePHP', 'autoload'));
         if(strcmp(strtoupper($pathMod),'NORMAL') === 0 || !isset($_SERVER['PATH_INFO'])){
             $this->c = isset($_GET['c'])?$_GET['c']:'Index';
             $this->a = isset($_GET['a'])?$_GET['a']:'Index';
@@ -127,23 +128,20 @@ class SinglePHP {
                 $this->a = 'Index';
             }
         }
-        includeIfExist(C('APP_FULL_PATH').'/Controller/'.$this->c.'Controller.class.php');
         if(!class_exists($this->c.'Controller')){
-            includeIfExist(C('APP_FULL_PATH').'/Controller/EmptyController.class.php');
-            if(!class_exists('EmptyController')){
-                halt('模块'.$this->c.'不存在');
-            }
+            halt('控制器'.$this->c.'不存在');
         }
         $controllerClass = $this->c.'Controller';
         $controller = new $controllerClass();
         if(!method_exists($controller, $this->a.'Action')){
-            if(!method_exists($controller, 'EmptyAction')){
-                halt('方法'.$this->a.'不存在');
-            }else{
-                $this->a = 'Empty';
-            }
+            halt('方法'.$this->a.'不存在');
         }
         call_user_func(array($controller,$this->a.'Action'));
+    }
+    public static function autoload($class){
+        if(substr($class,-10)=='Controller'){
+            includeIfExist(C('APP_FULL_PATH').'/Controller/'.$class.'.class.php');
+        }
     }
 }
 
