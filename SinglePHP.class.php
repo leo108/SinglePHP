@@ -161,6 +161,8 @@ class SinglePHP {
             includeIfExist(C('APP_FULL_PATH').'/Controller/'.$class.'.class.php');
         }elseif(substr($class,-6)=='Widget'){
             includeIfExist(C('APP_FULL_PATH').'/Widget/'.$class.'.class.php');
+        }else{
+            includeIfExist(C('APP_FULL_PATH').'/Lib/'.$class.'.class.php');
         }
     }
 }
