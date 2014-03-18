@@ -3,9 +3,9 @@
  * 获取和设置配置参数 支持批量定义
  * 如果$key是关联型数组，则会按K-V的形式写入配置
  * 如果$key是数字索引数组，则返回对应的配置数组
- * @param string|array $name 配置变量
- * @param mixed $value 配置值
- * @return mixed
+ * @param string|array $key 配置变量
+ * @param array|null $value 配置值
+ * @return array|null
  */
 function C($key,$value=null){
     static $_config = array();
@@ -83,7 +83,7 @@ function url($controller='Index', $action='Index'){
 
 /**
  * 获取数据库实例
- * @return DB_Instance
+ * @return DB
  */
 function M(){
     $dbConf = C(array('DB_HOST','DB_PORT','DB_USER','DB_PWD','DB_NAME','DB_CHARSET'));
@@ -101,14 +101,40 @@ function includeIfExist($path){
     }
 }
 
+/**
+ * 总控类
+ */
 class SinglePHP {
+    /**
+     * 控制器
+     * @var string
+     */
     private $c;
+    /**
+     * Action
+     * @var string
+     */
     private $a;
+    /**
+     * 单例
+     * @var SinglePHP
+     */
     private static $_instance;
+
+    /**
+     * 构造函数，初始化配置
+     * @param array $conf
+     */
     private function __construct($conf){
         C($conf);
     }
     private function __clone(){}
+
+    /**
+     * 获取单例
+     * @param array $conf
+     * @return SinglePHP
+     */
     public static function getInstance($conf){
         if(!(self::$_instance instanceof self)){
             self::$_instance = new self($conf);
@@ -156,6 +182,11 @@ class SinglePHP {
         }
         call_user_func(array($controller,$this->a.'Action'));
     }
+
+    /**
+     * 自动加载函数
+     * @param string $class 类名
+     */
     public static function autoload($class){
         if(substr($class,-10)=='Controller'){
             includeIfExist(C('APP_FULL_PATH').'/Controller/'.$class.'.class.php');
@@ -167,12 +198,27 @@ class SinglePHP {
     }
 }
 
+/**
+ * 控制器类
+ */
 class Controller {
+    /**
+     * 视图实例
+     * @var View
+     */
     private $_view;
+
+    /**
+     * 构造函数，初始化视图实例，调用hook
+     */
     public function __construct(){
         $this->_view = new View();
         $this->_init();
     }
+
+    /**
+     * 前置hook
+     */
     protected function _init(){}
     /**
      * 渲染模板并输出
@@ -222,11 +268,35 @@ class Controller {
         exit;
     }
 }
+
+/**
+ * 视图类
+ */
 class View {
+    /**
+     * 视图文件目录
+     * @var string
+     */
     private $_tplDir;
+    /**
+     * 视图文件路径
+     * @var string
+     */
     private $_viewPath;
+    /**
+     * 视图变量列表
+     * @var array
+     */
     private $_data = array();
+    /**
+     * 给tplInclude用的变量列表
+     * @var array
+     */
     private static $tmpData;
+
+    /**
+     * @param string $tplDir
+     */
     public function __construct($tplDir=''){
         if($tplDir == ''){
             $this->_tplDir = './'.C('APP_PATH').'/View/';
@@ -237,7 +307,7 @@ class View {
     }
     /**
      * 为视图引擎设置一个模板变量
-     * @param string $name 要在模板中使用的变量名
+     * @param string $key 要在模板中使用的变量名
      * @param mixed $value 模板中该变量名对应的值
      * @return void
      */
@@ -246,7 +316,7 @@ class View {
     }
     /**
      * 渲染模板并输出
-     * @param null|string $tpl 模板文件路径，相对于App/View/文件的相对路径，不包含后缀名，例如index/index
+     * @param null|string $tplFile 模板文件路径，相对于App/View/文件的相对路径，不包含后缀名，例如index/index
      * @return void
      */
     public function display($tplFile) {
@@ -258,6 +328,7 @@ class View {
     /**
      * 用于在模板文件中包含其他模板
      * @param string $path 相对于View目录的路径
+     * @param array $data 传递给子模板的变量列表，key为变量名，value为变量值
      * @return void
      */
     public static function tplInclude($path, $data=array()){
@@ -272,17 +343,41 @@ class View {
     }
 }
 
+/**
+ * Widget类
+ * 使用时需继承此类，重写invoke方法，并在invoke方法中调用display
+ */
 class Widget {
+    /**
+     * 视图实例
+     * @var View
+     */
     protected $_view;
+    /**
+     * Widget名
+     * @var string
+     */
     protected $_widgetName;
+
+    /**
+     * 构造函数，初始化视图实例
+     */
     public function __construct(){
         $this->_widgetName = get_class($this);
         $dir = C('APP_FULL_PATH') . '/Widget/Tpl/';
         $this->_view = new View($dir);
     }
 
+    /**
+     * 处理逻辑
+     * @param mixed $data 参数
+     */
     public function invoke($data){}
 
+    /**
+     * 渲染模板
+     * @param string $tpl 模板路径，如果为空则用类名作为模板名
+     */
     protected function display($tpl=''){
         if($tpl == ''){
             $tpl = $this->_widgetName;
@@ -290,6 +385,12 @@ class Widget {
         $this->_view->display($tpl);
     }
 
+    /**
+     * 为视图引擎设置一个模板变量
+     * @param string $name 要在模板中使用的变量名
+     * @param mixed $value 模板中该变量名对应的值
+     * @return void
+     */
     protected function assign($name,$value){
         $this->_view->assign($name,$value);
     }
@@ -304,11 +405,36 @@ class Widget {
  * 可以用DB_PORT和DB_CHARSET来指定端口和编码，默认3306和utf8
  */
 class DB {
+    /**
+     * 数据库链接
+     * @var resource
+     */
     private $_db;
+    /**
+     * 保存最后一条sql
+     * @var string
+     */
     private $_lastSql;
+    /**
+     * 上次sql语句影响的行数
+     * @var int
+     */
     private $_rows;
+    /**
+     * 上次sql执行的错误
+     * @var string
+     */
     private $_error;
+    /**
+     * 实例数组
+     * @var array
+     */
     private static $_instance = array();
+
+    /**
+     * 构造函数
+     * @param array $dbConf 配置数组
+     */
     private function __construct($dbConf){
         if(!isset($dbConf['DB_CHARSET'])){
             $dbConf['DB_CHARSET'] = 'utf8';
@@ -324,6 +450,12 @@ class DB {
         mysql_set_charset($dbConf['DB_CHARSET']);
     }
     private function __clone(){}
+
+    /**
+     * 获取DB类
+     * @param array $dbConf 配置数组
+     * @return DB
+     */
     static public function getInstance($dbConf){
         if(!isset($dbConf['DB_PORT'])){
             $dbConf['DB_PORT'] = '3306';
@@ -417,9 +549,17 @@ class DB {
     public function getError(){
         return $this->_error;
     }
+
+    /**
+     * 记录sql到文件
+     */
     private function logSql(){
         Log::sql($this->_lastSql);
     }
+
+    /**
+     * 记录错误日志到文件
+     */
     private function logError(){
         $str = '[SQL ERR]'.$this->_error.' SQL:'.$this->_lastSql;
         Log::warn($str);
@@ -447,29 +587,72 @@ class Log{
         }
         file_put_contents($logPath, $msg, FILE_APPEND);
     }
+
+    /**
+     * 打印fatal日志
+     * @param string $msg 日志信息
+     */
     public static function fatal($msg){
         self::write($msg, 'FATAL', true);
     }
+
+    /**
+     * 打印warning日志
+     * @param string $msg 日志信息
+     */
     public static function warn($msg){
         self::write($msg, 'WARN', true);
     }
+
+    /**
+     * 打印notice日志
+     * @param string $msg 日志信息
+     */
     public static function notice($msg){
         self::write($msg, 'NOTICE');
     }
+
+    /**
+     * 打印debug日志
+     * @param string $msg 日志信息
+     */
     public static function debug($msg){
         self::write($msg, 'DEBUG');
     }
+
+    /**
+     * 打印sql日志
+     * @param string $msg 日志信息
+     */
     public static function sql($msg){
         self::write($msg, 'SQL');
     }
 }
 
+/**
+ * ExtException类，记录额外的异常信息
+ */
 class ExtException extends Exception{
+    /**
+     * @var array
+     */
     protected $extra;
+
+    /**
+     * @param string $message
+     * @param array $extra
+     * @param int $code
+     * @param null $previous
+     */
     public function __construct($message = "", $extra = array(), $code = 0, $previous = null){
         $this->extra = $extra;
         parent::__construct($message, $code, $previous);
     }
+
+    /**
+     * 获取额外的异常信息
+     * @return array
+     */
     public function getExtra(){
         return $this->extra;
     }
