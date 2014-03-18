@@ -463,3 +463,14 @@ class Log{
         self::write($msg, 'SQL');
     }
 }
+
+class ExtException extends Exception{
+    protected $extra;
+    public function __construct($message = "", $extra = array(), $code = 0, $previous = null){
+        $this->extra = $extra;
+        parent::__construct($message, $code, $previous);
+    }
+    public function getExtra(){
+        return $this->extra;
+    }
+}
