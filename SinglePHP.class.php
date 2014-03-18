@@ -36,6 +36,21 @@ function C($key,$value=null){
 }
 
 /**
+ * 调用Widget
+ * @param string $name widget名
+ * @param array $data 传递给widget的变量列表，key为变量名，value为变量值
+ * @return void
+ */
+function W($name, $data = array()){
+    $fullName = $name.'Widget';
+    if(!class_exists($fullName)){
+        halt('Widget '.$name.'不存在');
+    }
+    $widget = new $fullName();
+    $widget->invoke($data);
+}
+
+/**
  * 终止程序运行
  * @param string $str 终止原因
  * @return void
@@ -141,6 +156,8 @@ class SinglePHP {
     public static function autoload($class){
         if(substr($class,-10)=='Controller'){
             includeIfExist(C('APP_FULL_PATH').'/Controller/'.$class.'.class.php');
+        }elseif(substr($class,-6)=='Widget'){
+            includeIfExist(C('APP_FULL_PATH').'/Widget/'.$class.'.class.php');
         }
     }
 }
@@ -148,7 +165,7 @@ class SinglePHP {
 class Controller {
     private $_view;
     public function __construct(){
-        $this->_view = View::getInstance();
+        $this->_view = new View();
         $this->_init();
     }
     protected function _init(){}
@@ -197,23 +214,21 @@ class Controller {
      */
     protected function redirect($url){
         header("Location: $url");
+        exit;
     }
 }
 class View {
-    private static $_instance;
     private $_tplDir;
     private $_viewPath;
-    private static $_includeTpl;
     private $_data = array();
-    private function __clone(){}
-    public static function getInstance(){
-        if(!(self::$_instance instanceof self)){
-            self::$_instance = new self();
+    private static $tmpData;
+    public function __construct($tplDir=''){
+        if($tplDir == ''){
+            $this->_tplDir = './'.C('APP_PATH').'/View/';
+        }else{
+            $this->_tplDir = $tplDir;
         }
-        return self::$_instance;
-    }
-    public function __construct(){
-        $this->_tplDir = './'.C('APP_PATH').'/View/';
+
     }
     /**
      * 为视图引擎设置一个模板变量
@@ -240,11 +255,38 @@ class View {
      * @param string $path 相对于View目录的路径
      * @return void
      */
-    public static function tplInclude($path){
-        self::$_includeTpl = C('APP_FULL_PATH') . '/View/' . $path . '.php';
+    public static function tplInclude($path, $data=array()){
+        self::$tmpData = array(
+            'path' => C('APP_FULL_PATH') . '/View/' . $path . '.php',
+            'data' => $data,
+        );
         unset($path);
-        extract(self::$_instance->_data);
-        include self::$_includeTpl;
+        unset($data);
+        extract(self::$tmpData['data']);
+        include self::$tmpData['path'];
+    }
+}
+
+class Widget {
+    protected $_view;
+    protected $_widgetName;
+    public function __construct(){
+        $this->_widgetName = get_class($this);
+        $dir = C('APP_FULL_PATH') . '/Widget/Tpl/';
+        $this->_view = new View($dir);
+    }
+
+    public function invoke($data){}
+
+    protected function display($tpl=''){
+        if($tpl == ''){
+            $tpl = $this->_widgetName;
+        }
+        $this->_view->display($tpl);
+    }
+
+    protected function assign($name,$value){
+        $this->_view->assign($name,$value);
     }
 }
 
