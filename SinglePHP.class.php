@@ -434,7 +434,7 @@ class Log{
      * @param string $level 日志等级
      * @param bool $wf 是否为错误日志
      */
-    public static function wirte($msg, $level='DEBUG', $wf=false){
+    public static function write($msg, $level='DEBUG', $wf=false){
         $msg = date('[ Y-m-d H:i:s ]')."[{$level}]".$msg."\r\n";
         $logPath = C('APP_FULL_PATH').'/Log/'.date('Ymd').'.log';
         if($wf){
@@ -443,18 +443,18 @@ class Log{
         file_put_contents($logPath, $msg, FILE_APPEND);
     }
     public static function fatal($msg){
-        self::wirte($msg, 'FATAL', true);
+        self::write($msg, 'FATAL', true);
     }
     public static function warn($msg){
-        self::wirte($msg, 'WARN', true);
+        self::write($msg, 'WARN', true);
     }
     public static function notice($msg){
-        self::wirte($msg, 'NOTICE');
+        self::write($msg, 'NOTICE');
     }
     public static function debug($msg){
-        self::wirte($msg, 'DEBUG');
+        self::write($msg, 'DEBUG');
     }
     public static function sql($msg){
-        self::wirte($msg, 'SQL');
+        self::write($msg, 'SQL');
     }
 }
