@@ -121,6 +121,9 @@ class SinglePHP {
      * @return void
      */
     public function run(){
+        if(C('USE_SESSION') == true){
+            session_start();
+        }
         C('APP_FULL_PATH', getcwd().'/'.C('APP_PATH').'/');
         includeIfExist( C('APP_FULL_PATH').'/common.php');
         $pathMod = C('PATH_MOD');
@@ -158,6 +161,8 @@ class SinglePHP {
             includeIfExist(C('APP_FULL_PATH').'/Controller/'.$class.'.class.php');
         }elseif(substr($class,-6)=='Widget'){
             includeIfExist(C('APP_FULL_PATH').'/Widget/'.$class.'.class.php');
+        }else{
+            includeIfExist(C('APP_FULL_PATH').'/Lib/'.$class.'.class.php');
         }
     }
 }
@@ -456,5 +461,16 @@ class Log{
     }
     public static function sql($msg){
         self::write($msg, 'SQL');
+    }
+}
+
+class ExtException extends Exception{
+    protected $extra;
+    public function __construct($message = "", $extra = array(), $code = 0, $previous = null){
+        $this->extra = $extra;
+        parent::__construct($message, $code, $previous);
+    }
+    public function getExtra(){
+        return $this->extra;
     }
 }
