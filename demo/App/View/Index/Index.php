@@ -1,45 +1,9 @@
 <?php
 $data = array(
     'title' => 'Welcome',
+    'body_class' => 'bs-docs-home',
 );
 View::tplInclude('Public/header', $data); ?>
-    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
-  <div class="container">
-    <div class="navbar-header">
-      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a href="./" class="navbar-brand">SinglePHP</a>
-    </div>
-    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-      <ul class="nav navbar-nav">
-        <li>
-          <a href="./index.php?a=start">起步</a>
-        </li>
-        <li>
-          <a href="./css">CSS</a>
-        </li>
-        <li>
-          <a href="./components">组件</a>
-        </li>
-        <li>
-          <a href="./javascript">JavaScript插件</a>
-        </li>
-        <li>
-          <a href="./customize">定制</a>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a href="./about">关于</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</header>
 <main class="bs-masthead" id="content" role="main">
   <div class="container">
     <h1>SinglePHP</h1>
@@ -53,4 +17,5 @@ View::tplInclude('Public/header', $data); ?>
       <a href="./index.php?a=start" class="btn btn-outline-inverse btn-lg">开始看文档</a>
     </p>
   </div>
-</main><?php View::tplInclude('Public/footer'); ?>
+</main>
+<?php View::tplInclude('Public/footer'); ?>
