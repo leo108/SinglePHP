@@ -32,10 +32,10 @@
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
         <li>
-          <a href="./index.php?a=start">起步</a>
+          <a href="./index.php?a=start">简介</a>
         </li>
         <li>
-          <a href="./css">CSS</a>
+          <a href="./index.php?a=doc">详细文档</a>
         </li>
         <li>
           <a href="./components">组件</a>

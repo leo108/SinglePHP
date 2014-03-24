@@ -1,11 +1,11 @@
 <?php
 $data = array(
-    'title' => '起步',
+    'title' => '简介',
 );
 View::tplInclude('Public/header', $data); ?>
     <div class="bs-header" id="content">
       <div class="container">
-        <h1>起步</h1>
+        <h1>简介</h1>
         <p>简要介绍SinglePHP，目录结构和Hello World。</p>
       </div>
     </div>
