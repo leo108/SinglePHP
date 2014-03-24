@@ -119,33 +119,23 @@ class IndexController extends Controller {
             </div>
             <div class="bs-docs-section">
               <div class="page-header">
-                <h1 id="hello_world">Hello World</h1>
+                <h1 id="db">数据库操作</h1>
               </div>
-              <p class="lead">只需增加3个文件，即可输出hello world。</p>
-              <p>入口文件：index.php</p>
+              <p class="lead">SinglePHP不能称为一个MVC框架的原因就是SinglePHP没有M。为了精简代码，SinglePHP只提供了简单的query和execute，并没有做模型和数据表的映射。</p>
+              <p class='lead'>可以通过M函数来便捷的获取数据库对象（没错就是抄的thinkphp你咬我啊）。代码如下：</p>
               <div class='highlight'>
               <pre><code class="language-php">&lt;?php
-include './SinglePHP.class.php';         //包含核心文件
-$config = array('APP_PATH' =&gt; './App/'); //指定业务目录为App
-SinglePHP::getInstance($config)-&gt;run();  //撒丫子跑起来啦</code></pre>
-              </div>
-              <p>默认控制器：App/Controller/IndexController.class.php</p>
-              <div class='highlight'>
-              <pre><code class="language-php">&lt;?php
-class IndexController extends Controller {       //控制器必须继承Controller类或其子类
-    public function IndexAction(){               //默认Action
-        $this-&gt;assign('content', 'Hello World'); //给模板变量赋值
-        $this-&gt;display();                        //渲染吧骚年
-    }
-}</code></pre>
-              </div>
-              <p>模板文件：App/View/Index/Index.php</p>
-              <div class='highlight'>
-              <pre><code class="language-php">&lt;?php echo $content;</code></pre>
-              </div>
-              <p>在浏览器访问index.php，应该会输出</p>
-              <div class='highlight'>
-              <pre><code class="language-html">Hello World</code></pre>
+$db = M();  //获取数据库对象，前提是在入口文件配好数据库相关的配置
+$name = $db-&gt;escape($_GET['name']);  //转义字符
+//查询，失败返回false，否则返回数据
+$ret = $db-&gt;query("select * from user where name = $name");
+echo $db-&gt;getRows();  //获得返回的行数
+echo $db-&gt;getLastSql();  //获得上一次执行的sql
+//执行增删改语句，失败返回false，否则返回影响的行数
+$count = $db-&gt;execute("insert user (name, email) values ('leo108', 'leo108@qq.com')");
+echo $db-&gt;getRows();  //获得返回的行数
+echo $db-&gt;getInsertId();  //获得自增ID
+echo $db-&gt;getError();  //如果执行sql失败，可以获得失败原因</code></pre>
               </div>
             </div>
 
