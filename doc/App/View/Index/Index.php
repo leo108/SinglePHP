@@ -10,7 +10,7 @@ View::tplInclude('Public/header', $data); ?>
     <p class="lead">单文件PHP框架，羽量级网站开发首选</p>
     <blockquote>
 <p>本项目由<a href='http://leo108.com' target='_blank'>leo108</a>开发，遵循GPLv2协议。</p>
-    <p>当前文档更新日期为：2014年3月19日</p>
+    <p>当前文档更新日期为：2014年3月25日</p>
     </blockquote>
     <p>
       <a href="https://github.com/leo108/SinglePHP" target='_blank' class="btn btn-outline-inverse btn-lg" >Fork On Github</a>
