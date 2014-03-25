@@ -53,32 +53,19 @@ function W($name, $data = array()){
 /**
  * 终止程序运行
  * @param string $str 终止原因
+ * @param bool $display 是否显示调用栈，默认不显示
  * @return void
  */
-function halt($str){
+function halt($str, $display=false){
     Log::fatal($str.' debug_backtrace:'.var_export(debug_backtrace(), true));
     header("Content-Type:text/html; charset=utf-8");
-    echo "<pre>";
-    debug_print_backtrace();
-    echo "</pre>";
+    if($display){
+        echo "<pre>";
+        debug_print_backtrace();
+        echo "</pre>";
+    }
     echo $str;
     exit;
-}
-
-/**
- * 根据配置生成action的url地址
- * @param string $controller 控制器
- * @param string $action 行为
- * @return string
- */
-function url($controller='Index', $action='Index'){
-    $pathMod = C('PATH_MOD');
-    if(strcmp(strtoupper($pathMod),'NORMAL') === 0){
-        $url = "c={$controller}&a={$action}";
-    }else{
-        $url = "{$controller}/{$action}";
-    }
-    return $url;
 }
 
 /**
