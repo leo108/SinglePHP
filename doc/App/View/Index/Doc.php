@@ -194,7 +194,7 @@ class SideWidget extends Widget{
     public function invoke($data){   //必须重写invoke方法
         //对$data做一些处理
         $this-&gt;assign('data', $data);  //给widget模板变量赋值，与控制器的assign相同
-        $this-&gt;display();              //渲染widget模板，本例使用的模板是Widget/Tpl/Side.php，如果传入参数，则使用Widget/Tpl/参数.php
+        $this-&gt;display();              //渲染widget模板，本例使用的模板是Widget/Tpl/SideWidget.php，如果传入参数，则使用Widget/Tpl/参数.php
     }
 }</code></pre>
               </div>
