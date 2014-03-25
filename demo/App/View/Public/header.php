@@ -37,19 +37,10 @@
         <li>
           <a href="./index.php?a=doc">详细文档</a>
         </li>
-        <li>
-          <a href="./components">组件</a>
-        </li>
-        <li>
-          <a href="./javascript">JavaScript插件</a>
-        </li>
-        <li>
-          <a href="./customize">定制</a>
-        </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="./about">关于</a>
+          <a target='_blank' href="https://github.com/leo108/SinglePHP">SinglePHP官网</a>
         </li>
       </ul>
     </nav>

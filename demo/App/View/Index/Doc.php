@@ -75,7 +75,7 @@ index.php?c=Test&amp;a=Test  //TestController-&gt;TestAction
 </code></pre>
                 </div>
               <h3>PATHINFO方式</h3>
-              <p class="lead">PATHINFO方式需要webserver支持PATHINFO，可以通过var_dump($_SERVER['PATH_INFO']);来查看。如果webserver不支持PATHINFO，而又配置成了PATHINFO方式的路由，SinglePHP将会忽略此项配置而采用NORMAL方式路由。示例如下：</p>
+              <p class="lead">PATHINFO方式需要webserver支持PATHINFO，可以通过<code>var_dump($_SERVER['PATH_INFO']);</code>来查看。如果webserver不支持PATHINFO，而又配置成了PATHINFO方式的路由，SinglePHP将会忽略此项配置而采用NORMAL方式路由。示例如下：</p>
                 <div class="highlight">
                 <pre><code>index.php            //IndexController-&gt;IndexAction
 index.php/Test       //TestController-&gt;IndexAction
@@ -88,7 +88,7 @@ index.php/Test/Test  //TestController-&gt;TestAction
               <div class="page-header">
                 <h1 id="controller">控制器</h1>
               </div>
-              <p class="lead">所有的控制器必须继承Controller类或其子类，并且类名必须以Controller结尾。</p>
+              <p class="lead">所有的控制器必须继承Controller类或其子类，并且类名必须以Controller结尾，统一放置在Controller目录下，文件名必须是“类名.class.php”。</p>
               <p class="lead">每一个Action对应控制器类的一个方法，方法名必须以Action结尾，同时必须是public权限。</p>
               <p class="lead">示例代码如下：</p>
               <div class='highlight'>
@@ -121,14 +121,14 @@ class IndexController extends Controller {
               <div class="page-header">
                 <h1 id="db">数据库操作</h1>
               </div>
-              <p class="lead">SinglePHP不能称为一个MVC框架的原因就是SinglePHP没有M。为了精简代码，SinglePHP只提供了简单的query和execute，并没有做模型和数据表的映射。</p>
+              <p class="lead">SinglePHP不能称为一个MVC框架的原因就是SinglePHP没有M。为了精简代码，SinglePHP只提供了简单的<code>query</code>和<code>execute</code>，并没有做模型和数据表的映射。</p>
               <p class='lead'>可以通过M函数来便捷的获取数据库对象（没错就是抄的thinkphp你咬我啊）。代码如下：</p>
               <div class='highlight'>
               <pre><code class="language-php">&lt;?php
 $db = M();  //获取数据库对象，前提是在入口文件配好数据库相关的配置
 $name = $db-&gt;escape($_GET['name']);  //转义字符
 //查询，失败返回false，否则返回数据
-$ret = $db-&gt;query("select * from user where name = $name");
+$ret = $db-&gt;query("select * from user where name = '$name'");
 echo $db-&gt;getRows();  //获得返回的行数
 echo $db-&gt;getLastSql();  //获得上一次执行的sql
 //执行增删改语句，失败返回false，否则返回影响的行数
@@ -136,6 +136,93 @@ $count = $db-&gt;execute("insert user (name, email) values ('leo108', 'leo108@qq
 echo $db-&gt;getRows();  //获得返回的行数
 echo $db-&gt;getInsertId();  //获得自增ID
 echo $db-&gt;getError();  //如果执行sql失败，可以获得失败原因</code></pre>
+              </div>
+            </div>
+            <div class="bs-docs-section">
+              <div class="page-header">
+                <h1 id="view">视图引擎</h1>
+              </div>
+              <p class="lead">SinglePHP没有提供语法花哨的模板引擎，而是采用原生的PHP语法。一来降低学习成本，二来减少SinglePHP的体积。</p>
+              <p class='lead'>通过Controller类的<code>assign</code>来给模板变量赋值，通过<code>display</code>方法来渲染模板。</p>
+              <p class='lead'>assign方法接受两个参数，第一个参数是模板变量名，第二个参数是模板变量值。</p>
+              <p class='lead'>display方法可以接受1个或0个参数。当没有参数时，则默认使用View/控制器名/Action名.php作为模板；如果参数值不带有'/'，则默认使用View/控制器名/参数值.php作为模板；如果参数值带有1个'/'，则会使用View/参数值.php作为模板。</p>
+              <p class='lead'>示例代码如下：</p>
+              <div class='highlight'>
+              <pre><code class="language-php">&lt;?php
+class IndexController extends Controller { 
+    public function IndexAction(){
+        $this-&gt;assign('str', 'hello world'); //给模板变量str赋值'hello world'
+        $this-&gt;display();           //使用View/Index/Index.php作为模板
+    }
+    public function TestAction(){
+        $this-&gt;display('test2');    //使用View/Index/test2.php作为模板
+    }
+    public function AnotherTestAction(){
+        $this-&gt;display('user/test');    //使用View/user/test.php作为模板
+    }
+}</code></pre>
+              </div>
+              <p class='lead'>SinglePHP还提供了模板include功能，通过<code>View::tplInclude</code>来引入其他模板，该静态方法接受1个或2个参数，第一个参数是模板，规则与<code>display</code>的参数相同，第二个参数是传递给该模板的模板变量，必须是关联型数组。</p>
+              <p class='lead'>示例代码如下：</p>
+              <p>View/Public/header.php 公共头部文件</p>
+              <div class='highlight'>
+              <pre><code class="language-php">&lt;!DOCTYPE html&gt;
+&lt;head&gt;
+    &lt;title&gt;&lt;?php echo $title;?&gt;&lt;/title&gt;
+&lt;/head&gt;</code></pre>
+              </div>
+              <p>View/Index/Index.php 首页模板文件</p>
+              <div class='highlight'>
+              <pre><code class="language-php">&lt;?php
+$data = array(
+        'title' =&gt; 'Welcome',  //设置title变量为Welcome
+        );
+View::tplInclude('Public/header', $data); ?&gt;
+xxxxxxx其他玩意</code></pre>
+              </div>
+            </div>
+            <div class="bs-docs-section">
+              <div class="page-header">
+                <h1 id="widget">Widget功能</h1>
+              </div>
+              <p class="lead">Widget功能可以说是SinglePHP简单模板引擎的一个补充，坚持简单而强大的原则～</p>
+              <p class='lead'>每个Widget都需要继承Widget类，类名必须以Widget结尾，放在App/Widget目录下，文件名必须是"类名.class.php"。Widget的模板文件在Widget/Tpl文件下。代码如下：</p>
+              <p>Widget/SideWidget.class.php</p>
+              <div class='highlight'>
+              <pre><code class="language-php">&lt;?php
+class SideWidget extends Widget{
+    public function invoke($data){   //必须重写invoke方法
+        //对$data做一些处理
+        $this-&gt;assign('data', $data);  //给widget模板变量赋值，与控制器的assign相同
+        $this-&gt;display();              //渲染widget模板，本例使用的模板是Widget/Tpl/Side.php，如果传入参数，则使用Widget/Tpl/参数.php
+    }
+}</code></pre>
+              </div>
+              <p>View/Index/Index.php  可以是任意模板文件</p>
+              <div class='highlight'>
+              <pre><code class="language-php">&lt;?php
+W('Side', array('page' =&gt; 'Index'));    //在模板文件中通过W函数来调用Widget，第二个参数会传递给invoke方法
+</code></pre>
+              </div>
+              <p>Tip：什么时候用<code>View::tplInclude</code>？什么时候用<code>Widget</code>？</p>
+              <blockquote>
+                <p>既然View::tplInclude也可以传递模板变量，那为何还需要Widget功能呢？</p>
+                <p>开发Widget功能主要是考虑到让视图文件更专注于展示，避免将业务逻辑写在模板文件中。当传递的数据需要进一步处理之后再展示出来，就需要用Widget而不是View::tplInclude。当然如果你能忍受在模板文件中写业务逻辑，也可以不用Widget（羽量级的网站没有那么多的破规范:)）</p>
+              </blockquote>
+            </div>
+            <div class="bs-docs-section">
+              <div class="page-header">
+                <h1 id="log">日志</h1>
+              </div>
+              <p class="lead">SinglePHP提供了一个简单的日志类，可以分级记录各类信息，目前提供了Fatal、Warning、Notice、Debug和Sql5种级别。日志会存储在App/Log目录下，当然前提条件是该目录是可写的。日志是按天存储的，如果是Fatal和Warning的日志，则会存放在.log.wf文件里。SinglePHP本身会打一些必要的日志，例如sql执行记录，路由出错等等。</p>
+              <p class='lead'>代码如下：</p>
+              <div class='highlight'>
+              <pre><code class="language-php">&lt;?php
+Log::fatal('something');
+Log::warn('something');
+Log::notice('something');
+Log::debug('something');
+Log::sql('something');</code></pre>
               </div>
             </div>
 
