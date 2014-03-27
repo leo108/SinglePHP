@@ -32,7 +32,7 @@ function C($key,$value=null){
             halt('传入参数不正确');
         }
     }
-    return null;
+    return true;
 }
 
 /**
@@ -85,6 +85,8 @@ function M(){
 function includeIfExist($path){
     if(file_exists($path)){
         include $path;
+    } else {
+        halt('Invalid path:' . $path);
     }
 }
 
@@ -137,7 +139,7 @@ class SinglePHP {
         if(C('USE_SESSION') == true){
             session_start();
         }
-        C('APP_FULL_PATH', getcwd().'/'.C('APP_PATH').'/');
+        C('APP_FULL_PATH', realpath(getcwd().'/'.C('APP_PATH')));
         includeIfExist( C('APP_FULL_PATH').'/common.php');
         $pathMod = C('PATH_MOD');
         $pathMod = empty($pathMod)?'NORMAL':$pathMod;
@@ -149,12 +151,12 @@ class SinglePHP {
             $pathInfo = isset($_SERVER['PATH_INFO'])?$_SERVER['PATH_INFO']:'';
             $pathInfoArr = explode('/',trim($pathInfo,'/'));
             if(isset($pathInfoArr[0]) && $pathInfoArr[0] !== ''){
-                $this->c = $pathInfoArr[0];
+                $this->c = ucfirst($pathInfoArr[0]);
             }else{
                 $this->c = 'Index';
             }
             if(isset($pathInfoArr[1])){
-                $this->a = $pathInfoArr[1];
+                $this->a = ucfirst($pathInfoArr[1]);
             }else{
                 $this->a = 'Index';
             }
