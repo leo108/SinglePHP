@@ -33,6 +33,9 @@ View::tplInclude('Public/header', $data); ?>
                   <a href="#widget">Widget功能</a>
                 </li>
                 <li>
+                  <a href="#autoload">自动加载</a>
+                </li>
+                <li>
                   <a href="#log">日志</a>
                 </li>
             </ul>
@@ -209,6 +212,14 @@ W('Side', array('page' =&gt; 'Index'));    //在模板文件中通过W函数来�
                 <p>既然View::tplInclude也可以传递模板变量，那为何还需要Widget功能呢？</p>
                 <p>开发Widget功能主要是考虑到让视图文件更专注于展示，避免将业务逻辑写在模板文件中。当传递的数据需要进一步处理之后再展示出来，就需要用Widget而不是View::tplInclude。当然如果你能忍受在模板文件中写业务逻辑，也可以不用Widget（羽量级的网站没有那么多的破规范:)）</p>
               </blockquote>
+            </div>
+            <div class="bs-docs-section">
+              <div class="page-header">
+                <h1 id="autoload">自动加载</h1>
+              </div>
+              <p class="lead">除了自动加载Controller类和Widget类之外，SinglePHP还会自动加载一个App/common.php和App/Lib下的类文件</p>
+              <p class='lead'>App/common.php这个文件里可以是通用的函数，如果不存在也不会影响程序的运行。</p>
+              <p class='lead'>当SinglePHP遇到一个未定义的类时，会尝试去加载App/Lib/类名.class.php，例如有一个分页类Page，那么会尝试加载App/Lib/Page.class.php，如果文件不存在，或者文件中也没有定义这个类，将会报错～</p>
             </div>
             <div class="bs-docs-section">
               <div class="page-header">
