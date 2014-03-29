@@ -1,8 +1,43 @@
-<?php
-$data = array(
-    'title' => '简介',
-);
-View::tplInclude('Public/header', $data); ?>
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="leo108">
+    <title>简介</title>
+    <meta name="description" content="SinglePHP" />
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://v3.bootcss.com/docs-assets/css/docs.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/highlight.js/7.3/styles/github.min.css" rel="stylesheet">
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.min.js"></script>
+    </head>
+<body >
+    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="./" class="navbar-brand">SinglePHP</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li class="active">
+          <a href="./start.html">简介</a>
+        </li>
+        <li>
+          <a href="./doc.html">详细文档</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a target='_blank' href="https://github.com/leo108/SinglePHP">SinglePHP官网</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
     <div class="bs-header" id="content">
       <div class="container">
         <h1>简介</h1>
@@ -112,4 +147,14 @@ class IndexController extends Controller {       //控制器必须继承Controll
 
     </div>
 
-<?php View::tplInclude('Public/footer'); ?>
+<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="http://cdn.bootcss.com/holder/2.0/holder.min.js"></script>
+<script src="http://cdn.bootcss.com/highlight.js/7.3/highlight.min.js"></script>
+<script >hljs.initHighlightingOnLoad();</script>
+<script src="http://v3.bootcss.com/docs-assets/js/application.js"></script>
+  <script type="text/javascript">
+      var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+      document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F87e90f311d6eafe1e1c02963e3aaeef2' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+</body>
+</html>

@@ -31,12 +31,27 @@
     </div>
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
       <ul class="nav navbar-nav">
-        <li>
-          <a href="./index.php?a=start">简介</a>
-        </li>
-        <li>
-          <a href="./index.php?a=doc">详细文档</a>
-        </li>
+         <li>
+            <a href='index.php?a=Url'>Normal方式路由</a>
+         </li>
+         <li>
+            <a href='index.php?a=Redirect'>重定向</a>
+         </li>
+         <li>
+            <a href='index.php?a=Ajax'>Ajax返回</a>
+         </li>
+         <li>
+            <a href='index.php?a=Common'>Common文件自动加载</a>
+         </li>
+         <li>
+            <a href='index.php?a=AutoLoad'>类自动加载</a>
+         </li>
+         <li>
+            <a href='index.php?a=Widget'>Widget</a>
+         </li>
+         <li>
+            <a href='index.php?a=Log'>日志</a>
+         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
