@@ -6,6 +6,12 @@ SinglePHP是一个单文件PHP框架，适用于简单系统的快速开发，�
 
 目前SinglePHP由[leo108](http://leo108.com)开发维护，如果你希望参与到此项目中来，可以到[Github](https://github.com/leo108/SinglePHP)上Fork项目并提交Pull Request。
 
+### 文档
+
+中文: [http://leo108.github.io/SinglePHP/](http://leo108.github.io/SinglePHP/)
+
+English: [http://leo108.github.io/SinglePHP/en/](http://leo108.github.io/SinglePHP/en/) (Not Finished Yet)
+
 ### Demo
 
 在线演示：[demo](http://singlephp.sinaapp.com)
