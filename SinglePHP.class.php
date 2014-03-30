@@ -561,18 +561,25 @@ class DB {
  */
 class Log{
     /**
-     * 打日志
+     * 打日志，支持SAE环境
      * @param string $msg 日志内容
      * @param string $level 日志等级
      * @param bool $wf 是否为错误日志
      */
     public static function write($msg, $level='DEBUG', $wf=false){
-        $msg = date('[ Y-m-d H:i:s ]')."[{$level}]".$msg."\r\n";
-        $logPath = C('APP_FULL_PATH').'/Log/'.date('Ymd').'.log';
-        if($wf){
-            $logPath .= '.wf';
+        if(function_exists('sae_debug')){ //如果是SAE，则使用sae_debug函数打日志
+            $msg = "[{$level}]".$msg;
+            sae_set_display_errors(false);
+            sae_debug(trim($msg));
+            sae_set_display_errors(true);
+        }else{
+            $msg = date('[ Y-m-d H:i:s ]')."[{$level}]".$msg."\r\n";
+            $logPath = C('APP_FULL_PATH').'/Log/'.date('Ymd').'.log';
+            if($wf){
+                $logPath .= '.wf';
+            }
+            file_put_contents($logPath, $msg, FILE_APPEND);
         }
-        file_put_contents($logPath, $msg, FILE_APPEND);
     }
 
     /**
