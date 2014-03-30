@@ -567,7 +567,7 @@ class Log{
      * @param bool $wf 是否为错误日志
      */
     public static function write($msg, $level='DEBUG', $wf=false){
-        if(isset($_SERVER['HTTP_APPNAME'])){ //如果是SAE，则使用sae_debug函数打日志
+        if(function_exists('sae_debug')){ //如果是SAE，则使用sae_debug函数打日志
             $msg = "[{$level}]".$msg;
             sae_set_display_errors(false);
             sae_debug(trim($msg));
