@@ -7,7 +7,7 @@ class IndexController extends BaseController {
     public function UrlAction(){
         echo 'url测试成功';
     }
-    public function RedirectAction(){ 
+    public function RedirectAction(){
         $this->redirect('http://www.baidu.com'); //302跳转到百度
     }
     public function AjaxAction(){
@@ -33,6 +33,6 @@ class IndexController extends BaseController {
         Log::notice('something');
         Log::debug('something');
         Log::sql('something');
-        echo '请到Log文件查看效果';
+        echo '请到Log文件夹查看效果。如果是SAE环境，可以在日志中心的DEBUG日志查看。';
     }
 }
