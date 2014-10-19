@@ -4,10 +4,10 @@
     <meta name="author" content="leo108">
     <title><?php echo $title;?></title>
     <meta name="description" content="SinglePHP" />
-    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://v3.bootcss.com/docs-assets/css/docs.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://v3.bootcss.com/assets/css/docs.min.css" rel="stylesheet">
     <link href="http://cdn.bootcss.com/highlight.js/7.3/styles/github.min.css" rel="stylesheet">
-    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     <?php
     if(isset($css)) foreach($css as $path){
         echo "<link rel='stylesheet' href='$path'>";
@@ -18,7 +18,7 @@
     ?>
 </head>
 <body <?php if(isset($body_class)){echo "class='{$body_class}'";}?>>
-    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+    <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
   <div class="container">
     <div class="navbar-header">
       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">

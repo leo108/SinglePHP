@@ -4,13 +4,13 @@
     <meta name="author" content="leo108">
     <title>简介</title>
     <meta name="description" content="SinglePHP" />
-    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://v3.bootcss.com/docs-assets/css/docs.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://v3.bootcss.com/assets/css/docs.min.css" rel="stylesheet">
     <link href="http://cdn.bootcss.com/highlight.js/7.3/styles/github.min.css" rel="stylesheet">
-    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
     </head>
 <body >
-    <header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
+    <header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
   <div class="container">
     <div class="navbar-header">
       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
@@ -38,7 +38,7 @@
     </nav>
   </div>
 </header>
-    <div class="bs-header" id="content">
+    <div class="bs-docs-header" id="content">
       <div class="container">
         <h1>简介</h1>
         <p>简要介绍SinglePHP，目录结构和Hello World。</p>
@@ -47,7 +47,7 @@
     <div class="container bs-docs-container">
       <div class="row">
         <div class="col-md-3">
-          <div class="bs-sidebar hidden-print" role="complementary">
+          <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
             <ul class="nav bs-sidenav">
                 <li>
                   <a href="#what">什么是SinglePHP</a>
@@ -62,6 +62,9 @@
                   <a href="#hello_world">Hello World</a>
                 </li>
             </ul>
+            <a class="back-to-top" href="#top">
+              返回顶部
+            </a> 
           </div>
         </div>
         <div class="col-md-9" role="main">
@@ -147,11 +150,11 @@ class IndexController extends Controller {       //控制器必须继承Controll
 
     </div>
 
-<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 <script src="http://cdn.bootcss.com/holder/2.0/holder.min.js"></script>
 <script src="http://cdn.bootcss.com/highlight.js/7.3/highlight.min.js"></script>
 <script >hljs.initHighlightingOnLoad();</script>
-<script src="http://v3.bootcss.com/docs-assets/js/application.js"></script>
+<script src="http://v3.bootcss.com/assets/js/docs.min.js"></script>
   <script type="text/javascript">
       var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
       document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F87e90f311d6eafe1e1c02963e3aaeef2' type='text/javascript'%3E%3C/script%3E"));
